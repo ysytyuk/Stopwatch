@@ -62,46 +62,50 @@ public class StopwatchActivity extends AppCompatActivity {
                 btnPause.setEnabled(false);
                 btnReset.setEnabled(false);
             }
-            handler.postDelayed(runTimer, 0);
+
         }
+        handler.postDelayed(runTimer, 0);
 
     }
 
-    //When activity go to foreground
+//    //When activity go to foreground
 //    @Override
 //    protected void onStop(){
 //        super.onStop();
-//        wasRunning = running;
-//        running = false;
+////        wasRunning = running;
+////        running = false;
 //    }
-
+//
 //    @Override
 //    protected void onPause(){
 //        super.onPause();
-//        wasRunning = running;
-//        running = false;
+////        wasRunning = running;
+////        if (running){
+////            handler.postDelayed(runTimer, 0);
+////        }
 //    }
-
-    //When activity go back to screen user interface
+//
+//    //When activity go back to screen user interface
 //    @Override
 //    protected void onStart(){
 //        super.onStart();
-//        if(wasRunning){
-//            running = true;
-//        }
+////        if(wasRunning){
+////            running = true;
+////        }
 //    }
-
+//
 //    @Override
 //    protected void onResume(){
 //        super.onResume();
-//        if(wasRunning){
-//            running = true;
-//        }
+////        if(wasRunning){
+////            running = true;
+////        }
 //    }
 
     //Save variables when activity destroy and create one more time if you change orientation
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putLong("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
         //savedInstanceState.putBoolean("wasRunning", wasRunning);
@@ -113,6 +117,18 @@ public class StopwatchActivity extends AppCompatActivity {
         savedInstanceState.putInt("hours", hours);
     }
 
+
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        seconds = savedInstanceState.getLong("seconds");
+        running = savedInstanceState.getBoolean("running");
+        startTime = savedInstanceState.getLong("startTime");
+        timeInMilliseconds = savedInstanceState.getLong("timeInMilliseconds");
+        timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
+        secs = savedInstanceState.getInt("secs");
+        minutes = savedInstanceState.getInt("minutes");
+        hours = savedInstanceState.getInt("hours");
+    }
 
     public void onClickStart(View view){
         startTime = SystemClock.uptimeMillis();
