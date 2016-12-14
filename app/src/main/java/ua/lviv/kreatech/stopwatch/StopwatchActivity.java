@@ -13,7 +13,6 @@ public class StopwatchActivity extends AppCompatActivity {
 
     private long seconds = 0L;
     private boolean running;
-//    private boolean wasRunning;
     private long startTime = 0L;
     private long timeInMilliseconds = 0L;
     private long timeSwapBuff = 0L;
@@ -61,6 +60,7 @@ public class StopwatchActivity extends AppCompatActivity {
         editor.putLong("startTime", startTime);
         editor.putBoolean("running", running);
         editor.putLong("timeSwapBuff", timeSwapBuff);
+        editor.putInt("hours", hours);
         editor.commit();
     }
 
@@ -72,7 +72,19 @@ public class StopwatchActivity extends AppCompatActivity {
         startTime = sharedPref.getLong("startTime", 0L);
         running = sharedPref.getBoolean("running", false);
         timeSwapBuff = sharedPref.getLong("timeSwapBuff", 0L);
+        hours = sharedPref.getInt("hours", 0);
         timeInMilliseconds = System.currentTimeMillis() - (System.currentTimeMillis() - startTime);
+        if(hours > 99){
+            running = false;
+            startTime = 0L;
+            timeInMilliseconds = 0L;
+            timeSwapBuff = 0L;
+            seconds = 0L;
+            hours = 0;
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            timeView.setText("00:00:00");
+        }
     }
 
     @Override
@@ -118,6 +130,9 @@ public class StopwatchActivity extends AppCompatActivity {
         secs = 0;
         minutes = 0;
         hours = 0;
+        sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
         timeView.setText("00:00:00");
         btnStart.setEnabled(true);
         btnPause.setEnabled(false);
