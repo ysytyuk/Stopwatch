@@ -26,7 +26,7 @@ public class StopwatchActivity extends AppCompatActivity {
     private int hours = 0;
     private final Handler handler = new Handler();
     private static final String TAG = "myLog";
-
+    private SharedPreferences sharedPref;
 
 
     @Override
@@ -37,14 +37,17 @@ public class StopwatchActivity extends AppCompatActivity {
         btnStart = (Button)findViewById(R.id.start_button);
         btnPause = (Button)findViewById(R.id.stop_button);
         btnReset = (Button)findViewById(R.id.reset_button);
-        if(savedInstanceState == null){
+        if(sharedPref == null){
             timeView.setText("00:00:00");
-        }else if (savedInstanceState != null){
-            seconds = savedInstanceState.getLong("seconds");
-            running = savedInstanceState.getBoolean("running");
-            startTime = savedInstanceState.getLong("startTime");
-            timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
         }
+//        if(savedInstanceState == null){
+//            timeView.setText("00:00:00");
+//        }else if (savedInstanceState != null){
+//            seconds = savedInstanceState.getLong("seconds");
+//            running = savedInstanceState.getBoolean("running");
+//            startTime = savedInstanceState.getLong("startTime");
+//            timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
+//        }
         handler.postDelayed(runTimer, 0);
 
     }
@@ -52,7 +55,7 @@ public class StopwatchActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong("seconds", seconds);
         editor.putLong("startTime", startTime);
@@ -64,7 +67,7 @@ public class StopwatchActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        sharedPref = getPreferences(MODE_PRIVATE);
         seconds = sharedPref.getLong("seconds", 0L);
         startTime = sharedPref.getLong("startTime", 0L);
         running = sharedPref.getBoolean("running", false);
@@ -79,14 +82,14 @@ public class StopwatchActivity extends AppCompatActivity {
     }
 
     //Save variables when activity destroy and create one more time if you change orientation
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putLong("seconds", seconds);
-        savedInstanceState.putBoolean("running", running);
-        savedInstanceState.putLong("startTime", startTime);
-        savedInstanceState.putLong("timeSwapBuff", timeSwapBuff);
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState){
+//        super.onSaveInstanceState(savedInstanceState);
+//        savedInstanceState.putLong("seconds", seconds);
+//        savedInstanceState.putBoolean("running", running);
+//        savedInstanceState.putLong("startTime", startTime);
+//        savedInstanceState.putLong("timeSwapBuff", timeSwapBuff);
+//    }
 
     public void onClickStart(View view){
         startTime = System.currentTimeMillis();
