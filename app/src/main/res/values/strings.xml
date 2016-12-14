@@ -3,4 +3,5 @@
     <string name="start">Start</string>
     <string name="stop">Pause</string>
     <string name="reset">Reset</string>
+    <string name="time">00:00:00</string>
 </resources>

@@ -36,9 +36,6 @@ public class StopwatchActivity extends AppCompatActivity {
         btnStart = (Button)findViewById(R.id.start_button);
         btnPause = (Button)findViewById(R.id.stop_button);
         btnReset = (Button)findViewById(R.id.reset_button);
-        if(sharedPref == null){
-            timeView.setText("00:00:00");
-        }
 //        if(savedInstanceState == null){
 //            timeView.setText("00:00:00");
 //        }else if (savedInstanceState != null){
@@ -61,7 +58,7 @@ public class StopwatchActivity extends AppCompatActivity {
         editor.putBoolean("running", running);
         editor.putLong("timeSwapBuff", timeSwapBuff);
         editor.putInt("hours", hours);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
