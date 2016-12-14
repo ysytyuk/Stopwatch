@@ -1,9 +1,10 @@
 package ua.lviv.kreatech.stopwatch;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class StopwatchActivity extends AppCompatActivity {
     private int minutes = 0;
     private int hours = 0;
     private final Handler handler = new Handler();
+    private static final String TAG = "myLog";
+
 
 
     @Override
@@ -35,72 +38,45 @@ public class StopwatchActivity extends AppCompatActivity {
         btnPause = (Button)findViewById(R.id.stop_button);
         btnReset = (Button)findViewById(R.id.reset_button);
         if(savedInstanceState == null){
-            btnStart.setEnabled(true);
-            btnPause.setEnabled(false);
-            btnReset.setEnabled(false);
             timeView.setText("00:00:00");
         }else if (savedInstanceState != null){
             seconds = savedInstanceState.getLong("seconds");
             running = savedInstanceState.getBoolean("running");
-//            wasRunning = savedInstanceState.getBoolean("wasRunning");
             startTime = savedInstanceState.getLong("startTime");
-            timeInMilliseconds = savedInstanceState.getLong("timeInMilliseconds");
             timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
-            secs = savedInstanceState.getInt("secs");
-            minutes = savedInstanceState.getInt("minutes");
-            hours = savedInstanceState.getInt("hours");
-            if(running){
-                btnStart.setEnabled(false);
-                btnPause.setEnabled(true);
-                btnReset.setEnabled(true);
-            }else if(!running && secs > 0){
-                btnStart.setEnabled(true);
-                btnPause.setEnabled(false);
-                btnReset.setEnabled(true);
-            }else if(!running){
-                btnStart.setEnabled(true);
-                btnPause.setEnabled(false);
-                btnReset.setEnabled(false);
-            }
-
         }
         handler.postDelayed(runTimer, 0);
 
     }
 
-//    //When activity go to foreground
-//    @Override
-//    protected void onStop(){
-//        super.onStop();
-////        wasRunning = running;
-////        running = false;
-//    }
-//
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-////        wasRunning = running;
-////        if (running){
-////            handler.postDelayed(runTimer, 0);
-////        }
-//    }
-//
-//    //When activity go back to screen user interface
-//    @Override
-//    protected void onStart(){
-//        super.onStart();
-////        if(wasRunning){
-////            running = true;
-////        }
-//    }
-//
-//    @Override
-//    protected void onResume(){
-//        super.onResume();
-////        if(wasRunning){
-////            running = true;
-////        }
-//    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("seconds", seconds);
+        editor.putLong("startTime", startTime);
+        editor.putBoolean("running", running);
+        editor.putLong("timeSwapBuff", timeSwapBuff);
+        editor.commit();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        seconds = sharedPref.getLong("seconds", 0L);
+        startTime = sharedPref.getLong("startTime", 0L);
+        running = sharedPref.getBoolean("running", false);
+        timeSwapBuff = sharedPref.getLong("timeSwapBuff", 0L);
+        timeInMilliseconds = System.currentTimeMillis() - (System.currentTimeMillis() - startTime);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.d(TAG, "Destroy my Activity");
+    }
 
     //Save variables when activity destroy and create one more time if you change orientation
     @Override
@@ -108,30 +84,12 @@ public class StopwatchActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putLong("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
-        //savedInstanceState.putBoolean("wasRunning", wasRunning);
         savedInstanceState.putLong("startTime", startTime);
-        savedInstanceState.putLong("timeInMilliseconds", timeInMilliseconds);
         savedInstanceState.putLong("timeSwapBuff", timeSwapBuff);
-        savedInstanceState.putInt("secs", secs);
-        savedInstanceState.putInt("minutes", minutes);
-        savedInstanceState.putInt("hours", hours);
-    }
-
-
-    public void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onRestoreInstanceState(savedInstanceState);
-        seconds = savedInstanceState.getLong("seconds");
-        running = savedInstanceState.getBoolean("running");
-        startTime = savedInstanceState.getLong("startTime");
-        timeInMilliseconds = savedInstanceState.getLong("timeInMilliseconds");
-        timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
-        secs = savedInstanceState.getInt("secs");
-        minutes = savedInstanceState.getInt("minutes");
-        hours = savedInstanceState.getInt("hours");
     }
 
     public void onClickStart(View view){
-        startTime = SystemClock.uptimeMillis();
+        startTime = System.currentTimeMillis();
         handler.postDelayed(runTimer, 0);
         running = true;
         btnStart.setEnabled(false);
@@ -168,8 +126,19 @@ public class StopwatchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (running){
-                    timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+                    timeInMilliseconds = System.currentTimeMillis() - startTime;
                     seconds = timeSwapBuff + timeInMilliseconds;
+                    btnStart.setEnabled(false);
+                    btnPause.setEnabled(true);
+                    btnReset.setEnabled(true);
+                }else if(!running && seconds > 0){
+                    btnStart.setEnabled(true);
+                    btnPause.setEnabled(false);
+                    btnReset.setEnabled(true);
+                }else if(!running){
+                    btnStart.setEnabled(true);
+                    btnPause.setEnabled(false);
+                    btnReset.setEnabled(false);
                 }
                 secs = (int) (seconds / 1000);
                 hours = secs / 3600;
