@@ -157,7 +157,7 @@ public class StopwatchActivity extends AppCompatActivity {
                 }
                 secs = (int) (seconds / 1000);
                 hours = secs / 3600;
-                minutes = secs / 60;
+                minutes = (secs % 3600) / 60;
                 secs = secs % 60;
                 String time = String.format("%02d:%02d:%02d", hours, minutes, secs);
                 timeView.setText(time);
