@@ -36,14 +36,6 @@ public class StopwatchActivity extends AppCompatActivity {
         btnStart = (Button)findViewById(R.id.start_button);
         btnPause = (Button)findViewById(R.id.stop_button);
         btnReset = (Button)findViewById(R.id.reset_button);
-//        if(savedInstanceState == null){
-//            timeView.setText("00:00:00");
-//        }else if (savedInstanceState != null){
-//            seconds = savedInstanceState.getLong("seconds");
-//            running = savedInstanceState.getBoolean("running");
-//            startTime = savedInstanceState.getLong("startTime");
-//            timeSwapBuff = savedInstanceState.getLong("timeSwapBuff");
-//        }
         handler.postDelayed(runTimer, 0);
 
     }
@@ -89,16 +81,6 @@ public class StopwatchActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "Destroy my Activity");
     }
-
-    //Save variables when activity destroy and create one more time if you change orientation
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstanceState){
-//        super.onSaveInstanceState(savedInstanceState);
-//        savedInstanceState.putLong("seconds", seconds);
-//        savedInstanceState.putBoolean("running", running);
-//        savedInstanceState.putLong("startTime", startTime);
-//        savedInstanceState.putLong("timeSwapBuff", timeSwapBuff);
-//    }
 
     public void onClickStart(View view){
         startTime = System.currentTimeMillis();

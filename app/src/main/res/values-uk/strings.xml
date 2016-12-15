@@ -3,4 +3,7 @@
     <string name="start">Старт</string>
     <string name="stop">Пауза</string>
     <string name="reset">Обнулити</string>
+    <string name="hours">Години</string>
+    <string name="minutes">Хвилини</string>
+    <string name="seconds">Секунди</string>
 </resources>
