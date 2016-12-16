@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ public class StopwatchActivity extends AppCompatActivity {
     private int minutes = 0;
     private int hours = 0;
     private final Handler handler = new Handler();
-    private static final String TAG = "myLog";
     private SharedPreferences sharedPref;
 
 
@@ -36,21 +34,6 @@ public class StopwatchActivity extends AppCompatActivity {
         btnStart = (Button)findViewById(R.id.start_button);
         btnPause = (Button)findViewById(R.id.stop_button);
         btnReset = (Button)findViewById(R.id.reset_button);
-        handler.postDelayed(runTimer, 0);
-
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        sharedPref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong("seconds", seconds);
-        editor.putLong("startTime", startTime);
-        editor.putBoolean("running", running);
-        editor.putLong("timeSwapBuff", timeSwapBuff);
-        editor.putInt("hours", hours);
-        editor.apply();
     }
 
     @Override
@@ -72,32 +55,32 @@ public class StopwatchActivity extends AppCompatActivity {
             hours = 0;
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
-            timeView.setText("00:00:00");
         }
+        handler.postDelayed(runTimer, 0);
     }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        Log.d(TAG, "Destroy my Activity");
+    protected void onPause(){
+        super.onPause();
+        sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("seconds", seconds);
+        editor.putLong("startTime", startTime);
+        editor.putBoolean("running", running);
+        editor.putLong("timeSwapBuff", timeSwapBuff);
+        editor.putInt("hours", hours);
+        editor.apply();
+        handler.removeCallbacks(runTimer);
     }
 
     public void onClickStart(View view){
         startTime = System.currentTimeMillis();
-        handler.postDelayed(runTimer, 0);
         running = true;
-        btnStart.setEnabled(false);
-        btnPause.setEnabled(true);
-        btnReset.setEnabled(true);
     }
 
     public void onClickStop(View view){
         timeSwapBuff += timeInMilliseconds;
-        handler.removeCallbacks(runTimer);
         running = false;
-        btnStart.setEnabled(true);
-        btnPause.setEnabled(false);
-        btnReset.setEnabled(true);
     }
 
     public void onClickReset(View view){
@@ -112,10 +95,6 @@ public class StopwatchActivity extends AppCompatActivity {
         sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
-        timeView.setText("00:00:00");
-        btnStart.setEnabled(true);
-        btnPause.setEnabled(false);
-        btnReset.setEnabled(false);
     }
 
 
@@ -132,7 +111,7 @@ public class StopwatchActivity extends AppCompatActivity {
                     btnStart.setEnabled(true);
                     btnPause.setEnabled(false);
                     btnReset.setEnabled(true);
-                }else if(!running){
+                }else {
                     btnStart.setEnabled(true);
                     btnPause.setEnabled(false);
                     btnReset.setEnabled(false);

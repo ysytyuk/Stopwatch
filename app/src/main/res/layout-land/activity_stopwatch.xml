@@ -19,8 +19,10 @@
             android:id="@+id/time_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="@string/time"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-10dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="80sp"/>
         <TextView
@@ -30,7 +32,7 @@
             android:layout_toLeftOf="@+id/minutes"
             android:layout_marginRight="70dp"
             android:text="@string/hours"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
         <TextView
             android:id="@+id/minutes"
             android:layout_width="wrap_content"
@@ -38,7 +40,7 @@
             android:layout_below="@+id/time_view"
             android:layout_centerHorizontal="true"
             android:text="@string/minutes"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +48,7 @@
             android:layout_toRightOf="@+id/minutes"
             android:layout_marginLeft="70dp"
             android:text="@string/seconds"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
     </RelativeLayout>
     <LinearLayout
         android:orientation="horizontal"
