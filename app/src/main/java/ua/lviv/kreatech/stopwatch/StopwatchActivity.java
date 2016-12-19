@@ -56,7 +56,7 @@ public class StopwatchActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
         }
-        handler.postDelayed(runTimer, 0);
+        handler.post(runTimer);
     }
 
     @Override
