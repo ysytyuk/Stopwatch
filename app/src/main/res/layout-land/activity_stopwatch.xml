@@ -58,20 +58,23 @@
         android:gravity="center">
         <Button
             android:id="@+id/start_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickStart"
             android:text="@string/start" />
         <Button
             android:id="@+id/stop_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickStop"
             android:text="@string/stop"/>
         <Button
             android:id="@+id/reset_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickReset"
             android:text="@string/reset"/>
     </LinearLayout>
