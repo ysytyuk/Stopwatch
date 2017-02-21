@@ -11,23 +11,24 @@
     android:orientation="vertical"
     tools:context="ua.lviv.kreatech.stopwatch.StopwatchActivity">
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical">
         <TextView
             android:id="@+id/time_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:ellipsize="start"
+            android:maxLines="1"
             android:text="@string/time"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="80sp"/>
+            android:textSize="55sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-40dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <TextView
@@ -50,6 +51,13 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:text="@string/seconds"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1.5"
+                android:text="@string/milisecs"
                 android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>

@@ -1,12 +1,21 @@
 package ua.lviv.kreatech.stopwatch;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Handler;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StopwatchActivity extends Activity {
 
@@ -22,8 +31,10 @@ public class StopwatchActivity extends Activity {
     private int secs = 0;
     private int minutes = 0;
     private int hours = 0;
+    private int milisecs = 0;
     private final Handler handler = new Handler();
     private SharedPreferences sharedPref;
+    private String time;
 
 
     @Override
@@ -73,6 +84,25 @@ public class StopwatchActivity extends Activity {
         handler.removeCallbacks(runTimer);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_history, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_history:
+                Intent intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onClickStart(View view){
         startTime = System.currentTimeMillis();
         running = true;
@@ -93,8 +123,23 @@ public class StopwatchActivity extends Activity {
         minutes = 0;
         hours = 0;
         sharedPref = getPreferences(MODE_PRIVATE);
+        String date = (DateFormat.format("dd-MM-yyyy HH:mm:ss", new java.util.Date()).toString());
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
+        ContentValues timeValues = new ContentValues();
+        timeValues.put("TIME", time);
+        timeValues.put("DATE", date);
+        SQLiteOpenHelper databaseHelper = new Database(this);
+        try{
+            SQLiteDatabase db = databaseHelper.getWritableDatabase();
+            db.insert("TIME_HISTORY", null, timeValues);
+            db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 20);");
+            db.close();
+        }catch (SQLiteException e){
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
     }
 
 
@@ -117,10 +162,11 @@ public class StopwatchActivity extends Activity {
                     btnReset.setEnabled(false);
                 }
                 secs = (int) (seconds / 1000);
+                milisecs = (int) (seconds % 1000);
                 hours = secs / 3600;
                 minutes = (secs % 3600) / 60;
                 secs = secs % 60;
-                String time = String.format("%02d:%02d:%02d", hours, minutes, secs);
+                time = String.format("%02d:%02d:%02d:%03d", hours, minutes, secs, milisecs);
                 timeView.setText(time);
                 handler.postDelayed(this, 0);
             }

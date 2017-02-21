@@ -3,8 +3,12 @@
     <string name="start">Start</string>
     <string name="stop">Pause</string>
     <string name="reset">Reset</string>
-    <string name="time">00:00:00</string>
+    <string name="time">00:00:00:000</string>
     <string name="hours">Hours</string>
     <string name="minutes">Minutes</string>
     <string name="seconds">Seconds</string>
+    <string name="milisecs">Milliseconds</string>
+    <string name="history_time">History</string>
+    <string name="time_history">Time</string>
+    <string name="date_history">Date</string>
 </resources>

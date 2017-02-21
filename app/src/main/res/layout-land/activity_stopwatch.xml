@@ -10,46 +10,57 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="ua.lviv.kreatech.stopwatch.StopwatchActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_centerHorizontal="true">
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/time_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="center"
+            android:ellipsize="start"
+            android:maxLines="1"
             android:text="@string/time"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="-10dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="80sp"/>
-        <TextView
-            android:layout_width="wrap_content"
+            android:textSize="60sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/time_view"
-            android:layout_toLeftOf="@+id/minutes"
-            android:layout_marginRight="70dp"
-            android:text="@string/hours"
-            android:textSize="12sp"/>
-        <TextView
-            android:id="@+id/minutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/time_view"
-            android:layout_centerHorizontal="true"
-            android:text="@string/minutes"
-            android:textSize="12sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/time_view"
-            android:layout_toRightOf="@+id/minutes"
-            android:layout_marginLeft="70dp"
-            android:text="@string/seconds"
-            android:textSize="12sp"/>
-    </RelativeLayout>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/hours"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/minutes"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="@string/seconds"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1.5"
+                android:text="@string/milisecs"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

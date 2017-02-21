@@ -6,4 +6,8 @@
     <string name="hours">Години</string>
     <string name="minutes">Хвилини</string>
     <string name="seconds">Секунди</string>
+    <string name="milisecs">Мілісекунди</string>
+    <string name="history_time">Історія</string>
+    <string name="time_history">Час</string>
+    <string name="date_history">Дата</string>
 </resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_history"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:columnCount="2"
+    tools:context="ua.lviv.kreatech.stopwatch.HistoryActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="0.7"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_gravity="fill_horizontal"
+        android:text="@string/time_history"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:textSize="20sp"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:text="@string/date_history"
+        android:layout_row="0"
+        android:layout_column="1"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_gravity="fill"
+        android:layout_columnSpan="2">
+        <ListView
+            android:id="@+id/list_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+</GridLayout>
