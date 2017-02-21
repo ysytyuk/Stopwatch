@@ -133,7 +133,7 @@ public class StopwatchActivity extends Activity {
         try{
             SQLiteDatabase db = databaseHelper.getWritableDatabase();
             db.insert("TIME_HISTORY", null, timeValues);
-            db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 20);");
+            db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 30);");
             db.close();
         }catch (SQLiteException e){
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
