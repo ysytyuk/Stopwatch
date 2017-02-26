@@ -18,6 +18,7 @@
         android:layout_column="0"
         android:gravity="center"
         android:textSize="20sp"
+        android:background="@drawable/back"
         android:layout_gravity="fill_horizontal"
         android:text="@string/time_history"/>
     <TextView
@@ -26,10 +27,12 @@
         android:layout_columnWeight="1"
         android:textSize="20sp"
         android:layout_gravity="fill_horizontal"
+        android:background="@drawable/back"
         android:gravity="center"
         android:text="@string/date_history"
         android:layout_row="0"
         android:layout_column="1"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
