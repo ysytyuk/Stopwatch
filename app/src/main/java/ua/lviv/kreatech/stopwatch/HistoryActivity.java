@@ -34,31 +34,29 @@ public class HistoryActivity extends Activity {
         db.close();
     }
 
-    private class UpdateDataTask extends AsyncTask<Void, Cursor, Boolean>{
+    private class UpdateDataTask extends AsyncTask<Void, Void, Cursor>{
 
-        protected Boolean doInBackground(Void ... params){
+        protected Cursor doInBackground(Void ... params){
             try{
                 SQLiteOpenHelper databaseHelper = new Database(HistoryActivity.this);
                 db = databaseHelper.getReadableDatabase();
                 cursor = db.query("TIME_HISTORY", new String[]{"_id", "TIME", "DATE"}, null, null, null, null, "DATE DESC");
-                publishProgress(cursor);
-                return true;
+                return cursor;
             }catch (SQLiteException e){
-                return false;
+                cursor = null;
+                return cursor;
             }
         }
 
-        protected void onProgressUpdate(Cursor ... cursors){
-            cursor = cursors[0];
-            ListView timeList = (ListView)findViewById(R.id.list_time);
-            CursorAdapter timeAdapter = new SimpleCursorAdapter(HistoryActivity.this, R.layout.list_item, cursor, new String[]{"TIME", "DATE"}, new int[]{R.id.time_history, R.id.date_history}, 0);
-            timeList.setAdapter(timeAdapter);
-        }
 
-        protected void onPostExecute(Boolean success){
-            if(!success){
+        protected void onPostExecute(Cursor cursor){
+            if(cursor == null){
                 Toast toast = Toast.makeText(HistoryActivity.this, "Database unavailable", Toast.LENGTH_SHORT);
                 toast.show();
+            }else{
+                ListView timeList = (ListView)findViewById(R.id.list_time);
+                CursorAdapter timeAdapter = new SimpleCursorAdapter(HistoryActivity.this, R.layout.list_item, cursor, new String[]{"TIME", "DATE"}, new int[]{R.id.time_history, R.id.date_history}, 0);
+                timeList.setAdapter(timeAdapter);
             }
         }
     }
