@@ -26,7 +26,7 @@ class Database extends SQLiteOpenHelper {
 
     private void updateDatabase(SQLiteDatabase db, int oldVersion, int newVersion){
         if(oldVersion < 1){
-            db.execSQL("CREATE TABLE TIME_HISTORY(_id INTEGER PRIMARY KEY AUTOINCREMENT, TIME TEXT, DATE TEXT);");
+            db.execSQL("CREATE TABLE TIME_HISTORY(_id INTEGER PRIMARY KEY AUTOINCREMENT, TIME TEXT, DATE DATETIME);");
         }
     }
 }
