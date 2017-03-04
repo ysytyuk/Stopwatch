@@ -5,9 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -36,6 +34,49 @@ public class StopwatchActivity extends Activity {
     private final Handler handler = new Handler();
     private SharedPreferences sharedPref;
     private String time;
+    private WritableDBAsyncTask writableDBAsyncTask;
+    private ContentValues timeValues;
+    private SQLiteOpenHelper databaseHelper;
+    private SQLiteDatabase db;
+
+
+    public SQLiteOpenHelper getDBHelper(){
+        if(databaseHelper == null) databaseHelper = new Database(this);
+        return databaseHelper;
+    }
+
+    public SQLiteDatabase getDb(){
+        if (db == null) db = getDBHelper().getWritableDatabase();
+        return db;
+    }
+
+    public void closeDb(){
+        if(db != null) {
+            db.close();
+            db = null;
+        }
+    }
+
+    public void cancelWritableDBAsyncTask(){
+        if(writableDBAsyncTask != null){
+            writableDBAsyncTask.cancel(true);
+            writableDBAsyncTask = null;
+        }
+    }
+
+    public void startWritableDBAsyncTask(){
+        cancelWritableDBAsyncTask();
+        writableDBAsyncTask = new WritableDBAsyncTask(getDb(), timeValues){
+            @Override
+            protected void onPostExecute(Result result){
+                if (result.exception != null){
+                    Toast toast = Toast.makeText(StopwatchActivity.this, "Database unavailable", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        };
+        writableDBAsyncTask.execute();
+    }
 
 
     @Override
@@ -127,10 +168,11 @@ public class StopwatchActivity extends Activity {
         String date = (DateFormat.format("dd-MM-yyyy HH:mm:ss", new java.util.Date()).toString());
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
-        ContentValues timeValues = new ContentValues();
+        timeValues = new ContentValues();
         timeValues.put("TIME", time);
         timeValues.put("DATE", date);
-        new InsertDataTask().execute(timeValues);
+        startWritableDBAsyncTask();
+        //new InsertDataTask().execute(timeValues);
 
     }
 
@@ -164,28 +206,35 @@ public class StopwatchActivity extends Activity {
             }
     };
 
-    private class InsertDataTask extends AsyncTask<ContentValues, Void, Boolean>{
 
-        protected Boolean doInBackground(ContentValues ... timeDataValues){
-            ContentValues timeValues = timeDataValues[0];
-            SQLiteOpenHelper databaseHelper = new Database(StopwatchActivity.this);
-            try{
-                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                db.insert("TIME_HISTORY", null, timeValues);
-                db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 30);");
-                db.close();
-                return true;
-            }catch (SQLiteException e){
-                return false;
-            }
-        }
-
-        protected void onPostExecute(Boolean success){
-            if (!success){
-                Toast toast = Toast.makeText(StopwatchActivity.this, "Database unavailable", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }
+    protected void onDestroy(){
+        super.onDestroy();
+        closeDb();
+        cancelWritableDBAsyncTask();
     }
+
+//    private class InsertDataTask extends AsyncTask<ContentValues, Void, Boolean>{
+//
+//        protected Boolean doInBackground(ContentValues ... timeDataValues){
+//            ContentValues timeValues = timeDataValues[0];
+//            SQLiteOpenHelper databaseHelper = new Database(StopwatchActivity.this);
+//            try{
+//                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+//                db.insert("TIME_HISTORY", null, timeValues);
+//                db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 30);");
+//                db.close();
+//                return true;
+//            }catch (SQLiteException e){
+//                return false;
+//            }
+//        }
+//
+//        protected void onPostExecute(Boolean success){
+//            if (!success){
+//                Toast toast = Toast.makeText(StopwatchActivity.this, "Database unavailable", Toast.LENGTH_SHORT);
+//                toast.show();
+//            }
+//        }
+//    }
 
 }
