@@ -172,7 +172,6 @@ public class StopwatchActivity extends Activity {
         timeValues.put("TIME", time);
         timeValues.put("DATE", date);
         startWritableDBAsyncTask();
-        //new InsertDataTask().execute(timeValues);
 
     }
 
@@ -212,29 +211,5 @@ public class StopwatchActivity extends Activity {
         closeDb();
         cancelWritableDBAsyncTask();
     }
-
-//    private class InsertDataTask extends AsyncTask<ContentValues, Void, Boolean>{
-//
-//        protected Boolean doInBackground(ContentValues ... timeDataValues){
-//            ContentValues timeValues = timeDataValues[0];
-//            SQLiteOpenHelper databaseHelper = new Database(StopwatchActivity.this);
-//            try{
-//                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-//                db.insert("TIME_HISTORY", null, timeValues);
-//                db.execSQL("DELETE FROM TIME_HISTORY WHERE _id NOT IN (SELECT _id FROM TIME_HISTORY ORDER BY _id DESC LIMIT 30);");
-//                db.close();
-//                return true;
-//            }catch (SQLiteException e){
-//                return false;
-//            }
-//        }
-//
-//        protected void onPostExecute(Boolean success){
-//            if (!success){
-//                Toast toast = Toast.makeText(StopwatchActivity.this, "Database unavailable", Toast.LENGTH_SHORT);
-//                toast.show();
-//            }
-//        }
-//    }
 
 }
